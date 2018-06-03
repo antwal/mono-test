@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Reflection;
 
 using ServiceStack;
 using ServiceStack.Text;
@@ -11,14 +12,23 @@ namespace mono_test
 {
     public partial class monotest : Form
     {
+		/// <summary>
+		/// Github Latest version API Url
+		/// </summary>
 		string VersionAPI = "https://api.github.com/repos/antwal/mono-test/releases/latest";
 
+		/// <summary>
+		/// The entry point of the program, where the program control starts and ends.
+		/// </summary>
+		/// <param name="args">The command-line arguments.</param>
         [STAThread]
         static void Main(string[] args)
-        {
+        {			
+			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler (AssemblyResolve);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
+
             monotest app = new monotest();
             
             Application.Run(app);
@@ -28,7 +38,12 @@ namespace mono_test
         {
             InitializeComponent();
         }
-        
+
+        /// <summary>
+        /// Ons the form load.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         private void onForm_Load(object sender, EventArgs e)
         {
             Console.WriteLine("onForm Load");
@@ -47,6 +62,11 @@ namespace mono_test
             Console.WriteLine("Exit Click");
         }
 
+		/// <summary>
+		/// Github API Call
+		/// </summary>
+		/// <param name="url">github api url</param>
+		/// <returns>json content</returns>
 		string GitHubAPI(string url)
 		{
 			var httpClient = new HttpClient ();
@@ -62,6 +82,23 @@ namespace mono_test
 				string jsonContent = responseContent.ReadAsStringAsync ().Result;
 				return jsonContent;
 			}				
+		}
+
+		/// <summary>
+		/// Handler Assemblies Resolve
+		/// </summary>
+		/// <returns>The resolve.</returns>
+		/// <param name="sender">Sender.</param>
+		/// <param name="args">Arguments.</param>
+		/// <returns>>assembly data</returns>
+		static Assembly AssemblyResolve(object sender, ResolveEventArgs args)
+		{
+			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream ("mono-test.ServiceStack.Text.dll"))
+			{
+				byte[] assemblyData = new byte[stream.Length];
+				stream.Read (assemblyData, 0, assemblyData.Length);
+				return Assembly.Load (assemblyData);
+			}
 		}
     }
 }

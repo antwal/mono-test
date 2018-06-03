@@ -15,14 +15,10 @@ matrix:
       dist: trusty
       sudo: required
       mono: latest
-      env: 
-        - OS=linux
-        - TARGET=mono
+      env: OS=linux
     - os: osx
       mono: latest
-      env: 
-        - OS=osx
-        - TARGET=mono
+      env: OS=osx
 
 install:
   - nuget restore src/mono-test.sln
