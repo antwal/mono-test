@@ -1,21 +1,52 @@
 # https://docs.travis-ci.com/user/languages/csharp/#.NET-Core
+
 language: csharp
+
 mono: latest
-#dotnet: 2.0.0
+dotnet: 2.0.0
+
+solution: mono-test.sln
+
+# Don't build other branches than master
+branches:
+  only:
+    - master
+
+matrix:
+  include:
+    # We're building ASF with dotnet on latest versions of Linux and OS X
+    - os: linux
+      # Ref: https://docs.travis-ci.com/user/reference/trusty/
+      dist: trusty
+      sudo: required
+    - os: osx
+      # Ref: https://docs.travis-ci.com/user/reference/osx/
+
+#env:
+#  global:
+#    - CONFIGURATION: Debug
 
 install:
-  - dotnet restore
+#  - dotnet restore
+  - nuget restore 
 
-before_install:
-  - set -e
+#before_install:
+#  - set -e
 
-install:
+#install:
 #  - sh build/travis_install.sh
 #  - source ~/travis/env || true
 
 script:
 #  - bash build/travis_script.sh
   - msbuild /p:Configuration=Debug mono-test.sln
+#  - dotnet build -c $CONFIGURATION mono-test.sln
+#  - dotnet --info
 
 after_script: set +e
+
+after_success:
+  - echo "Branch is $TRAVIS_BRANCH"
+  - echo "Pull Request is $TRAVIS_PULL_REQUEST_BRANCH"
+  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST_BRANCH" == "" ]; then echo "Success!!!"; fi
 
