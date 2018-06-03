@@ -25,9 +25,6 @@ install:
 
 script:
   - msbuild /p:Configuration=Debug src/mono-test.sln
-  - ls -al src/
-  - ls -al src/bin
-  - ls -al src/bin/Debug
 
 before_deploy:
   - sh deploy/travis.sh

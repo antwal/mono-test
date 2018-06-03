@@ -15,7 +15,7 @@ main() {
       ;;
   esac
 
-  cp $src/src/bin/Debug/mono-test.exe $tmp/
+  cp $src/src/bin/Debug/mono_test.exe $tmp/
 
   cd $tmp
   tar czf $src/mono-test-$TRAVIS_TAG-mono.tar.gz *
