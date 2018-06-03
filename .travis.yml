@@ -1,0 +1,20 @@
+# https://docs.travis-ci.com/user/languages/csharp/#.NET-Core
+language: csharp
+mono: latest
+#dotnet: 2.0.0
+
+install:
+- dotnet restore
+
+before_install:
+  - set -e
+
+install:
+#  - sh build/travis_install.sh
+#  - source ~/travis/env || true
+
+script:
+#  - bash build/travis_script.sh
+
+after_script: set +e
+
