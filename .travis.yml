@@ -23,24 +23,12 @@ matrix:
       env: 
         - OS=osx
         - TARGET=mono
-    - os: linux
-      dist: trusty
-      sudo: required
-      dotnet: 2.0.3
-      env:
-        - OS=linux
-        - TARGET=dotnet2
-    - os: osx
-      dotnet: 2.0.3
-      env: 
-        - OS=osx
-        - TARGET=dotnet2
 
 install:
-  - nuget restore 
+  - nuget restore src/mono-test.sln
 
 script:
-  - msbuild /p:Configuration=Debug mono-test.sln
+  - msbuild /p:Configuration=Debug src/mono-test.sln
 
 deploy:
   # TODO update `api_key.secure`
@@ -51,11 +39,11 @@ deploy:
     secure: a2oTHiMtrhes5ruVZUBbiXmBu/A+tn1LaWHfFT80TCSdK+442RQnnZWZju9a5/nnbWB2H+46fHxFbR651Bz+bllw/TFTlagjT5hGoa/w7zvg6l5AvfZ/NS1JFhQgLN0Z5t0GqF5pXemytZs3ACPCHNmGAX2r3/B0G2vf7bOXq3Xg20YPh0sGK/uJFjnDlL1Q+DS+9HoX2Rh4lwbvpMUL9Q1zC7ZWfyJOwz5/ZkR+t9ZEY6YcJOov331wt+DFcpV1XNiy4AZvYsG3M5gOG/YH62/kpqsFq9pOryXkjWha0R3hdDfNdPU3kUqmDBaPbWJI3Qsz/08qWeaD4nlHHDj9FVISRFaBSisyr84khdauSpN6HuFiH3S6pd5wFRukWadeHTfSUfvWY8DVkYVATyw2KlYPldVBI6sMRjtvLiOcclmd4/eyiVdt6rgJIkbwI6HgUd5YAtUaYnu36+ktWa3ZtLIhgGfEi5PPwzIYhmM7aK9fWT1Yk0SoKS11iHXLsVK/PkKAt4YqETv+ljwr2dl0I/lwxm0flyLy93tBIR5jwYWycSaL3Uf709sSMelaVtiySWlpVpLrtRP2f7ZvJt+xbTrgH539Th0pYuHujVIUbxkNLfnFqSuAvXDAvYe+krC1j85DQOvXAJ8w+guljJTClmPjf6V1fMWV8betlmS6REs=
   file_glob: true
   file:
-    - bin/Debug/*
+    - src/bin/Debug/*
   on:
-    condition: $OS = osx && $TARGET = dotnet2
+    condition: $OS = osx
     branch: master
-#    tags: true
+    tags: true
   provider: releases
   skip_cleanup: true
 
