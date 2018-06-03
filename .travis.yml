@@ -2,11 +2,6 @@
 
 language: csharp
 
-#mono: latest
-#dotnet: 2.0.3
-
-#solution: mono-test.sln
-
 # Don't build other branches than master
 branches:
   only:
@@ -41,22 +36,11 @@ matrix:
         - OS=osx
         - TARGET=dotnet2
 
-#env:
-#  global:
-#    - CONFIGURATION: Debug
-
-#install:
-#  - nuget restore 
-
-#before_install:
-#  - set -e
-  # Download all submodule
-#  - git submodule update --init --recursive
+install:
+  - nuget restore 
 
 script:
   - msbuild /p:Configuration=Debug mono-test.sln
-
-#after_script: set +e
 
 deploy:
   # TODO update `api_key.secure`
