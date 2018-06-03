@@ -14,34 +14,49 @@ branches:
 
 matrix:
   include:
-    # We're building ASF with dotnet on latest versions of Linux and OS X
+    # Ref: https://docs.travis-ci.com/user/reference/osx/
+    # Ref: https://docs.travis-ci.com/user/reference/trusty/
     - os: linux
-      # Ref: https://docs.travis-ci.com/user/reference/trusty/
       dist: trusty
       sudo: required
       mono: latest
-      env: OS=linux
+      env: 
+        - OS=linux
+        - TARGET=mono
     - os: osx
       mono: latest
-      env: OS=osx
-      # Ref: https://docs.travis-ci.com/user/reference/osx/
+      env: 
+        - OS=osx
+        - TARGET=mono
+    - os: linux
+      dist: trusty
+      sudo: required
+      dotnet: 2.0.3
+      env:
+        - OS=linux
+        - TARGET=dotnet2
+    - os: osx
+      dotnet: 2.0.3
+      env: 
+        - OS=osx
+        - TARGET=dotnet2
 
 #env:
 #  global:
 #    - CONFIGURATION: Debug
 
-install:
-  - nuget restore 
+#install:
+#  - nuget restore 
 
-before_install:
-  - set -e
+#before_install:
+#  - set -e
   # Download all submodule
 #  - git submodule update --init --recursive
 
 script:
   - msbuild /p:Configuration=Debug mono-test.sln
 
-after_script: set +e
+#after_script: set +e
 
 deploy:
   # TODO update `api_key.secure`
@@ -54,13 +69,11 @@ deploy:
   file:
     - bin/Debug/*
   on:
+    condition: $OS = osx && $TARGET = dotnet2
     branch: master
 #    tags: true
   provider: releases
   skip_cleanup: true
-  on:
-    condition: $OS = osx
-#    tags: true
 
 branches:
   only:
