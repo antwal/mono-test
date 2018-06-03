@@ -3,7 +3,7 @@
 language: csharp
 
 mono: latest
-dotnet: 2.0.0
+dotnet: 2.0.3
 
 solution: mono-test.sln
 
@@ -26,31 +26,54 @@ matrix:
 #  global:
 #    - CONFIGURATION: Debug
 
-install:
+#install:
 #  - dotnet restore
-  - nuget restore 
+#  - nuget restore 
 
-before_install:
+#before_install:
 #  - set -e
   # Download all submodule
-  - git submodule update --init --recursive
+#  - git submodule update --init --recursive
 
 #install:
 #  - sh build/travis_install.sh
 #  - source ~/travis/env || true
 
 script:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then echo "Hardware:"; grep model\ name /proc/cpuinfo | uniq -c; free -m; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then echo "Hardware:"; sysctl -n machdep.cpu.brand_string | uniq -c; fi
+#  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then echo "Hardware:"; grep model\ name /proc/cpuinfo | uniq -c; free -m; fi
+#  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then echo "Hardware:"; sysctl -n machdep.cpu.brand_string | uniq -c; fi
 #  - bash build/travis_script.sh
   - msbuild /p:Configuration=Debug mono-test.sln
 #  - dotnet build -c $CONFIGURATION mono-test.sln
 #  - dotnet --info
+#  - ./build-test.sh --linksources=true --verbosity=verbose
 
-after_script: set +e
+#after_script: set +e
 
 #after_success:
 #  - echo "Branch is $TRAVIS_BRANCH"
 #  - echo "Pull Request is $TRAVIS_PULL_REQUEST_BRANCH"
 #  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST_BRANCH" == "" ]; then echo "Success!!!"; fi
 
+#
+# Deploy Release
+#
+deploy:
+  # TODO update `api_key.secure`
+  # - Create a `public_repo` GitHub token. Go to: https://github.com/settings/tokens/new
+  # - Encrypt it: `travis encrypt 0123456789012345678901234567890123456789
+  # - Paste the output down here
+  api_key:
+    secure: a2oTHiMtrhes5ruVZUBbiXmBu/A+tn1LaWHfFT80TCSdK+442RQnnZWZju9a5/nnbWB2H+46fHxFbR651Bz+bllw/TFTlagjT5hGoa/w7zvg6l5AvfZ/NS1JFhQgLN0Z5t0GqF5pXemytZs3ACPCHNmGAX2r3/B0G2vf7bOXq3Xg20YPh0sGK/uJFjnDlL1Q+DS+9HoX2Rh4lwbvpMUL9Q1zC7ZWfyJOwz5/ZkR+t9ZEY6YcJOov331wt+DFcpV1XNiy4AZvYsG3M5gOG/YH62/kpqsFq9pOryXkjWha0R3hdDfNdPU3kUqmDBaPbWJI3Qsz/08qWeaD4nlHHDj9FVISRFaBSisyr84khdauSpN6HuFiH3S6pd5wFRukWadeHTfSUfvWY8DVkYVATyw2KlYPldVBI6sMRjtvLiOcclmd4/eyiVdt6rgJIkbwI6HgUd5YAtUaYnu36+ktWa3ZtLIhgGfEi5PPwzIYhmM7aK9fWT1Yk0SoKS11iHXLsVK/PkKAt4YqETv+ljwr2dl0I/lwxm0flyLy93tBIR5jwYWycSaL3Uf709sSMelaVtiySWlpVpLrtRP2f7ZvJt+xbTrgH539Th0pYuHujVIUbxkNLfnFqSuAvXDAvYe+krC1j85DQOvXAJ8w+guljJTClmPjf6V1fMWV8betlmS6REs=
+#  file_glob: true
+  on:
+    branch: master
+#    tags: true
+  provider: releases
+  skip_cleanup: true
+
+branches:
+  only:
+    # release tags
+    - /^v\d+\.\d+\.\d+.*$/
+    - master
