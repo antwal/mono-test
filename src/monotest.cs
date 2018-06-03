@@ -24,10 +24,12 @@ namespace mono_test
         [STAThread]
         static void Main(string[] args)
         {			
-			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler (AssemblyResolve);
+			//AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler (AssemblyResolve);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler (AssemblyResolve);
 
             monotest app = new monotest();
             
