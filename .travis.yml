@@ -44,6 +44,7 @@ matrix:
 #  - source ~/travis/env || true
 
 script:
+  - echo "Github Test Value: $GITHUB_TEST"
 #  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then echo "Hardware:"; grep model\ name /proc/cpuinfo | uniq -c; free -m; fi
 #  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then echo "Hardware:"; sysctl -n machdep.cpu.brand_string | uniq -c; fi
 #  - bash build/travis_script.sh
