@@ -4,7 +4,7 @@ mono: latest
 #dotnet: 2.0.0
 
 install:
-- dotnet restore
+  - dotnet restore
 
 before_install:
   - set -e
@@ -15,6 +15,7 @@ install:
 
 script:
 #  - bash build/travis_script.sh
+  - msbuild /p:Configuration=Debug mono-test.sln
 
 after_script: set +e
 
