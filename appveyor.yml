@@ -29,3 +29,10 @@ init:
   - git config --global core.autocrlf true
 
 
+build_script:
+    - cmd: >-
+        msbuild src/mono-test.sln /t:Rebuild /p:Configuration=Release;Platform=x64 /m
+        
+test_script:
+    - cmd: >-
+        echo "test not enabled yet"
